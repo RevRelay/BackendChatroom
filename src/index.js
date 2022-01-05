@@ -1,20 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import * as router from 'react-router-dom';
+const express = require("express");
+const app = express();
+const http = require("http");
+const cors = require("cors");
+const {Server} = require("socket.io");
 
-ReactDOM.render(
-	<React.StrictMode>
-		<router.BrowserRouter>
-			<App />
-		</router.BrowserRouter>
-	</React.StrictMode>,
- 	document.getElementById('root')
-);
+app.use(cors());
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const server  = http.createServer(app);
+const io = new Server(server,{
+    cors:{
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+    },
+});
+io.on("connection", (socket) =>{
+    console.log("User Connected...");
+
+socket.on("join_room", ({username, room}) =>{
+    socket.join(room);
+    console.log(`User ${username} Joined room: ${room}`);
+});
+
+socket.on("send_message", (data) =>{
+    socket.to(data.room).emit("receive_message", data);
+});
+
+
+
+    socket.on("disconnect", () =>{
+        console.log("User Disconnected...");
+    });
+});
+server.listen(3001, () =>{
+    console.log("Server Is Running");
+});
