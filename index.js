@@ -13,6 +13,7 @@ const io = new Server(server, {
 		methods: ["GET", "POST"],
 	},
 });
+
 io.on("connection", (socket) => {
 	console.log("User Connected...");
 
@@ -74,6 +75,6 @@ io.on("connection", (socket) => {
 		io.to(data["room"]).emit("user left", messageData);
 	});
 });
-server.listen(3000, () => {
+server.listen(5000, () => {
 	console.log("Server Is Running");
 });
