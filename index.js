@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
 		io.to(data["room"]).emit("user left", messageData);
 	});
 });
-server.listen(8081, () => {
+server.listen(8080, () => {
 	console.log("Server Is Running");
 });
 app.get("/", function (req, res) {
