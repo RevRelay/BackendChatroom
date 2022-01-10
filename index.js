@@ -78,3 +78,6 @@ io.on("connection", (socket) => {
 server.listen(5000, () => {
 	console.log("Server Is Running");
 });
+app.get("/", function (req, res) {
+	res.send("test");
+});
